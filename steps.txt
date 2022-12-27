@@ -1,0 +1,19 @@
+For client:
+1. In the terminal,
+  cd client
+  npm install
+  npm run start
+
+
+For server:
+1. Under the server folder, create a '.env' file
+  paste the following inside the '.env' file:
+    ATLAS_URI=mongodb+srv://garkgodwin:dj914r67qvyPnPzy@cluster0.hs1d1.mongodb.net/?retryWrites=true&w=majority
+    SERVER_PORT=8000
+    ENV=DEV
+    SECRET_KEY=somethinghasbeenstarted
+
+2. In the terminal,
+  cd server
+  npm install
+  npm run start

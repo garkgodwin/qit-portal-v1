@@ -12,8 +12,17 @@ const Dashboard = () => {
   const data = [
     {
       achieved: 100,
-      total: 500,
-      title: "Number of students",
+      total: 100,
+      title: "Students",
+      functionText: "Go to students",
+      handleClick: () => {
+        navigate("/students");
+      },
+    },
+    {
+      achieved: 50,
+      total: 100,
+      title: "Enrolled students",
       functionText: "Go to students",
       handleClick: () => {
         navigate("/students");
@@ -21,8 +30,8 @@ const Dashboard = () => {
     },
     {
       achieved: 20,
-      total: 100,
-      title: "Number of staffs",
+      total: 20,
+      title: "Staffs",
       functionText: "Go to staffs",
       handleClick: () => {
         navigate("/staffs");
@@ -30,8 +39,8 @@ const Dashboard = () => {
     },
     {
       achieved: 100,
-      total: 200,
-      title: "Number of classes",
+      total: 100,
+      title: "Classes",
       functionText: "Go to classes",
       handleClick: () => {
         navigate("/classes");
@@ -40,7 +49,7 @@ const Dashboard = () => {
     {
       achieved: 100,
       total: 100,
-      title: "Number of subjects",
+      title: "Subjects",
       functionText: "Go to subjects",
       handleClick: () => {
         navigate("/subjects");

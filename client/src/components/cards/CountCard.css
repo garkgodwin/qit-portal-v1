@@ -13,6 +13,7 @@
 .cc-data{
   display: flex;
   flex-direction: row;
+  width: 100%;
 }
 
 .cc-data .count, .cc-data h5{
@@ -21,6 +22,7 @@
 .cc-data h5{
   font-size: 20px;
   opacity: 0.8;
+  width: 100%;
 }
 .cc-data .count{
   display: flex;

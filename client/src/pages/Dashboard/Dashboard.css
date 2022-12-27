@@ -1,0 +1,20 @@
+
+.page-content-history{
+  padding: 8px;
+  width: 80%;
+  height: 600px;
+  box-shadow: 0 0 8px black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.page-content-history ul{
+  overflow: hidden;
+}
+.page-content-history ul li{
+  margin-top: 4px;
+  padding: 4px;
+  max-height: 64px;
+  border-bottom: 1px solid var(--color-30);
+}

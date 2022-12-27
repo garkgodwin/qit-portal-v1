@@ -1,0 +1,36 @@
+.CountCard{
+  box-shadow: 0 0 8px;
+  min-width: 240px;
+  min-height: 140px;
+  margin: 8px;
+  padding: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.cc-data{
+  display: flex;
+  flex-direction: row;
+}
+
+.cc-data .count, .cc-data h5{
+  width: 50%;
+}
+.cc-data h5{
+  font-size: 20px;
+  opacity: 0.8;
+}
+.cc-data .count{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+}
+.cc-data .count .count-extra{
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-30);
+}

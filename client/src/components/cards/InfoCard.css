@@ -1,0 +1,61 @@
+.InfoCard{
+  background-color: var(--color-60);
+  width: 95%;
+  height: 180px;
+  padding: 8px;
+  box-shadow: 0 0 8px;
+  margin: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.info-card-top, .info-card-mid, .info-card-bot{
+  margin: 2px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 60px;
+}
+
+.info-card-field{
+  min-width: 180px;
+  width: auto;
+  margin: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.info-card-field p{
+  font-size: 14px;
+  font-weight: 600;
+}
+.info-card-field span{
+  font-size: 12px;
+  border-top: 1px solid var(--color-30);
+}
+
+.info-card-bot .info-card-field{
+  opacity: 0.8;
+}
+.info-card-bot .info-card-field p{
+  font-size: 12px;
+}
+.info-card-bot .info-card-field span{
+  font-size: 10px;
+}
+.info-card-function{
+  background-color: var(--color-60);
+  color: var(--color-30);
+  border: 1px solid var(--color-30);
+  margin: 4px;
+  padding: 4px;
+  width: 200px;
+  height: 32px;
+}
+.info-card-function:hover{
+  background-color: var(--color-30);
+  color: var(--color-60);
+}

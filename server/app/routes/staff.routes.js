@@ -7,6 +7,8 @@ module.exports = (app) => {
 
   router.get("/", controller.getAllStaffs);
   router.get("/instructors", controller.getAllInstructors);
+  router.get("/:userID", controller.getStaffDetailsForUpdate);
+  router.put("/:userID", controller.updateStaffDetails);
   router.post("/new", controller.createStaff);
   router.get("/:personID", controller.getStaff);
   router.delete(

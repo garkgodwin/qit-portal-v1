@@ -2,7 +2,8 @@ form{
   background-color: var(--color-60);
   color: var(--color-10);
   box-shadow: 0 0 8px;
-  width: 600px;
+  min-width: 600px;
+  width: auto;
   min-height: 400px;
   height: auto;
   display: flex;
@@ -30,12 +31,23 @@ form{
   align-items: center;
   flex-direction: column;
 }
+.input-fields.input-fields-login{
+  border: none;
+}
 .input-fields{
   width: 100%;
   margin-top: 24px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  position: relative;
+  padding: 8px;
+  border: 1px solid var(--color-30);
+}
+.input-fields-title{
+  position: absolute;
+  top: -12px;
+  background-color: var(--color-60);
 }
 .input-fields.input-fields-center{
   justify-content: center;

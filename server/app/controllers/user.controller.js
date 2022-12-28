@@ -198,41 +198,38 @@ exports.lockUnlockAccount = async (req, res) => {
   });
 };
 exports.getStaffs = async (req, res) => {
-  await UserModel.find({})
-    .populate("person")
-    .then((data) => {
-      let newData = data.filter((d) => {
-        return d.role === 1 || d.role == 2 || d.role == 3;
-      });
-      return res.status(200).send({
-        message: "Successful",
-        data: newData,
-      });
+  const staffs = await UserModel.find({
+    $or: [
+      {
+        role: 1,
+      },
+      {
+        role: 2,
+      },
+      {
+        role: 3,
+      },
+    ],
+  })
+    .populate({
+      path: "person",
     })
-    .catch((error) => {
-      console.log(error);
-      return res.status(500).send({
-        message: "Something went wrong",
-      });
-    });
+    .exec();
+  return res.status(200).send({
+    message: "Successfully fetched the staffs",
+    data: staffs,
+  });
 };
 exports.getInstructors = async (req, res) => {
-  let instructors = [];
-  await InstructorModel.find()
+  const instructors = await InstructorModel.find({})
     .populate({
       path: "person",
     })
     .populate({
       path: "user",
     })
-    .then((data) => {
-      instructors = data;
-    })
-    .catch((error) => {
-      return res.status(500).send({
-        message: error.message,
-      });
-    });
+    .exec();
+
   return res.status(200).send({
     data: instructors,
     message: "Successful",

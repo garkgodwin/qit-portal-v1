@@ -32,7 +32,7 @@ exports.createStaffs = async (req, res) => {
     if (staffExists) {
       return;
     }
-    const newPerson = PersonModel({
+    let newPerson = PersonModel({
       name: {
         title: title,
         first: first,
@@ -44,7 +44,7 @@ exports.createStaffs = async (req, res) => {
       birthDate: birthDate,
       gender: gender,
     });
-    const newUser = UserModel({
+    let newUser = UserModel({
       username: username,
       email: "qitportalstudent1@gmail.com",
       password: generateHashedPassword(password),
@@ -59,11 +59,11 @@ exports.createStaffs = async (req, res) => {
     await newUser.save();
     if (role === 3) {
       //? add instructor data
-      const newInstructor = InstructorModel({
-        user: newUser._id,
-        person: newPerson._id,
+      let newInstructor = InstructorModel({
         department: "IT",
       });
+      newInstructor.user = newUser._id;
+      newInstructor.person = newPerson._id;
       await newInstructor.save();
     }
   });

@@ -1,13 +1,14 @@
 import React from "react";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import InfoCard from "../../components/cards/InfoCard";
 
 const StaffHome = () => {
+  const navigate = useNavigate();
   const { staffs } = useSelector((state) => state.data);
-  useEffect(() => {
-    console.log(staffs);
-  }, [staffs]);
+  const handleCreateStaff = () => {
+    navigate("/staffs/form");
+  };
   return (
     <>
       <div className="page-filters">
@@ -33,7 +34,15 @@ const StaffHome = () => {
         </div>
       </div>
       <div className="page-functions functions">
-        <button className="function">Create new staff</button>
+        <button
+          className="function"
+          onClick={(e) => {
+            e.preventDefault();
+            handleCreateStaff();
+          }}
+        >
+          Create new staff
+        </button>
       </div>
     </>
   );

@@ -38,25 +38,107 @@ exports.getAllStaffs = async (req, res) => {
       path: "user",
     })
     .exec();
-
+  console.log(staffs);
   return res.status(200).send({
     message: "Successfully fetched all staffs",
     data: staffs,
   });
 };
-exports.getAllInstructors = async (req, res) => {
-  let instructors = await InstructorModel.find({})
+exports.getStaffDetailsForUpdate = async (req, res) => {
+  const id = req.params.userID;
+  const user = await UserModel.findById(id);
+  const person = await PersonModel.findOne({ user: id });
+  if (user.role === 3) {
+    const instructor = await InstructorModel.findOne({ user: id });
+    return res.status(200).send({
+      message: "Successfully fetched staff details",
+      data: {
+        person: person,
+        user: user,
+        staff: instructor,
+      },
+    });
+  } else {
+    return res.status(200).send({
+      message: "Successfully fetched staff details",
+      data: {
+        person: person,
+        user: user,
+        staff: {
+          department: "N/A",
+        },
+      },
+    });
+  }
+};
+exports.updateStaffDetails = async (req, res) => {
+  //? only person details can be updated
+  const id = req.params.userID;
+  const b = req.body;
+  const name = b.person.name;
+  const fullNameExists = await PersonModel.findOne({
+    $and: [
+      {
+        "name.first": name.first,
+      },
+      {
+        "name.middle": name.middle,
+      },
+      {
+        "name.last": name.last,
+      },
+      {
+        "name.extension": name.extension,
+      },
+    ],
+  }).exec();
+  if (fullNameExists) {
+    return res.status(409).send({
+      message: "This full name has already been used.",
+    });
+  }
+
+  let person = await PersonModel.findOne({
+    user: id,
+  });
+  person.name = b.person.name;
+  person.age = b.person.age;
+  person.birthDate = b.person.birthDate;
+  person.gender = b.person.gender;
+  await person.save();
+
+  const user = await UserModel.findById(id)
     .populate({
       path: "person",
     })
-    .populate({
-      path: "user",
-    });
+    .exec();
+
   return res.status(200).send({
-    message: "Successfully fetched all instructors",
-    data: instructors,
+    message: "Successfully update staff details",
+    data: user,
   });
 };
+exports.getAllInstructors = async (req, res) => {
+  try {
+    const instructors = await InstructorModel.find({})
+      .populate({
+        path: "person",
+      })
+      .populate({
+        path: "user",
+      });
+    return res.status(200).send({
+      message: "Successfully fetched all instructors",
+      data: instructors,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).send({
+      message: "Something went wrong",
+    });
+  }
+};
+
 exports.createStaff = async (req, res) => {
   const b = req.body;
   const p = b.person;
@@ -149,6 +231,7 @@ exports.getStudents = async (req, res) => {
       message: "There are no active school data",
     });
   }
+
   const students = SissModel.find({
     instructor: instructorID,
     schoolData: currentSD._id,
@@ -168,6 +251,7 @@ exports.getStudents = async (req, res) => {
     data: students,
   });
 };
+
 exports.getSubjects = async (req, res) => {
   const instructorID = req.params.instructorID;
 

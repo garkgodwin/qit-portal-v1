@@ -62,32 +62,14 @@ exports.getAllStudents = async (req, res) => {
     message: "Successfully fetched all students",
   });
 };
-exports.getStudent = async (req, res) => {
-  let student = null;
-  await StudentModel.findOne({ _id: req.params.studentID })
-    .populate({
-      path: "person",
-    })
-    .populate({
-      path: "user",
-    })
-    .populate({
-      path: "guardians",
-    })
-    .populate({
-      path: "currentSchoolData",
-    })
-    .then((data) => {
-      student = data;
-    })
-    .catch((error) => {
-      return res.status(500).send({
-        message: error.message,
-      });
-    });
+exports.getStudentForUpdate = async (req, res) => {
+  const studentID = req.params.studentID;
+  const student = await StudentModel.findById(studentID).populate({
+    path: "person",
+  });
   return res.status(200).send({
+    message: "Successfully fetched the student details for update",
     data: student,
-    message: "Successfully fetched student details",
   });
 };
 exports.getStudentSubjectGrades = async (req, res) => {

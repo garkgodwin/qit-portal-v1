@@ -6,7 +6,7 @@ module.exports = (app) => {
   //TODO: ADD MORE ROUTES HERE
 
   router.get("/", controller.getAllStudents);
-  router.get("/:studentID", controller.getStudent);
+  router.get("/for-update/:studentID", controller.getStudentForUpdate);
   router.get("/:studentID/:subjectCode", controller.getStudentSubjectGrades);
   router.post("/", controller.createStudent);
   router.put("/update/:studentID", controller.updateStudent);

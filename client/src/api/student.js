@@ -80,7 +80,7 @@ export const createNewStudent = async (data) => {
   return result;
 };
 
-export const getStudentDetails = async (studentID) => {
+export const getStudentDetailsForUpdate = async (studentID) => {
   const token = localStorage.getItem("token");
   let result = {
     status: 0,
@@ -94,7 +94,7 @@ export const getStudentDetails = async (studentID) => {
   };
 
   await api
-    .get(ROOT + `/${studentID}`, config)
+    .get(ROOT + `/for-update/${studentID}`, config)
     .then((res) => {
       const resData = res.data;
       const data = resData.data;

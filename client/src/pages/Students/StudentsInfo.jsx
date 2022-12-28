@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { getStudentDetails } from "../../api/student";
 
 const StudentsInfo = () => {
   const data = useSelector((state) => state.data);
@@ -13,10 +12,7 @@ const StudentsInfo = () => {
     // eslint-disable-next-line
   }, [data]);
 
-  const fetchData = async () => {
-    const studentResult = await getStudentDetails(data.selectedData);
-    console.log(studentResult);
-  };
+  const fetchData = async () => {};
   return <>Student info</>;
 };
 

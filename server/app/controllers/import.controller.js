@@ -7,7 +7,10 @@ const InstructorModel = db.instructors;
 const StudentModel = db.students;
 const GuardianModel = db.guardians;
 const SchoolDataModel = db.schoolData;
-const { generateHashedPassword } = require("../helpers/generate");
+const {
+  generateHashedPassword,
+  generateStudentAndSchoolID,
+} = require("../helpers/generate");
 
 exports.createStaffs = async (req, res) => {
   //?SAMPLE XLSX IMPORT
@@ -110,7 +113,9 @@ exports.createStudents = async (req, res) => {
     const yearLevel = values.yearLevel;
     const section = values.section;
     const studentType = values.studentType;
-
+    const studentids = await generateStudentAndSchoolID();
+    const studentUniqueID = studentids.studentID;
+    const schoolUniqueID = studentids.schoolID;
     // student - guardian person;
     const gFirst = guardians[guardianIndex].first;
     const gLast = guardians[guardianIndex].last;
@@ -158,6 +163,8 @@ exports.createStudents = async (req, res) => {
       section: section,
       studentType: studentType,
       currentSchoolData: currentSD._id,
+      studentUniqueID: studentUniqueID,
+      schoolUniqueID: schoolUniqueID,
     });
     const newGuardianPerson = PersonModel({
       name: {

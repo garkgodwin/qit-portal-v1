@@ -79,6 +79,7 @@ const InfoCard = ({ data, type }) => {
     );
     navigate("/students/form");
   };
+
   const handleAddGuardian = () => {
     const studentID = data._id;
     dispatch(

@@ -142,16 +142,16 @@ exports.createStudent = async (req, res) => {
   const inputPerson = b.person;
   const inputStudent = b.student;
 
-  const resultEmailCheck = checkDuplicateEmail(inputUser.email);
+  const resultEmailCheck = await checkDuplicateEmail(inputUser.email);
   if (resultEmailCheck.status !== 200) {
     return res.status(resultEmailCheck.status).send({
-      message: resultEmailCheck.messsage,
+      message: resultEmailCheck.message,
     });
   }
-  const resultNameCheck = checkDuplicateName(inputPerson.name);
+  const resultNameCheck = await checkDuplicateName(inputPerson.name);
   if (resultNameCheck.status !== 200) {
     return res.status(resultNameCheck.status).send({
-      message: resultNameCheck.messsage,
+      message: resultNameCheck.message,
     });
   }
 
@@ -159,6 +159,7 @@ exports.createStudent = async (req, res) => {
     current: true,
     locked: false,
   });
+
   if (!currentSD) {
     return res.status(404).send({
       message: "There are no active school data",
@@ -168,14 +169,17 @@ exports.createStudent = async (req, res) => {
   let newPerson = PersonModel(inputPerson);
   let newUser = UserModel(inputUser);
   let newStudent = StudentModel(inputStudent);
+  //? FOR USER
   newUser.person = newPerson._id;
   newUser.otp = generateOtp();
   newUser.role = 4;
   // newUser.password = generateHashedPassword(); ---- this will be generated once registered on first setup
+  //? FOR PERSON
   newPerson.user = newUser._id;
+  //? FOR STUDENT
+  studentids = await generateStudentAndSchoolID();
   newStudent.user = newUser._id;
   newStudent.person = newPerson._id;
-  studentids = await generateStudentAndSchoolID();
   newStudent.studentUniqueID = studentids.studentID;
   newStudent.schoolUniqueID = studentids.schoolUniqueID;
   newStudent.currentSchoolData = currentSD._id;
@@ -197,17 +201,26 @@ exports.createStudent = async (req, res) => {
     shootDate: new Date().toISOString().split("T")[0],
   });
   await newNotification.save();
-  let s = newStudent;
-  s = {
-    ...s,
-    user: newUser,
-    person: newPerson,
-    guardians: [],
-  };
 
+  let s = await StudentModel.findById(newStudent._id)
+    .populate({
+      path: "person",
+    })
+    .populate({
+      path: "user",
+    })
+    .populate({
+      path: "currentSchoolData",
+    });
+  const user = await UserModel.findById(newUser._id).populate({
+    path: "person",
+  });
   res.status(200).send({
     message: "Succesfuly in creating new student",
-    data: s,
+    data: {
+      student: s,
+      user: user,
+    },
   });
 };
 exports.updateStudent = async (req, res) => {

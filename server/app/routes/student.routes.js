@@ -8,7 +8,7 @@ module.exports = (app) => {
   router.get("/", controller.getAllStudents);
   router.get("/:studentID", controller.getStudent);
   router.get("/:studentID/:subjectCode", controller.getStudentSubjectGrades);
-  router.post("/new", controller.createStudent);
+  router.post("/", controller.createStudent);
   router.put("/update/:studentID", controller.updateStudent);
   router.post("/new-guardian/:studentID", controller.createGuardian);
 

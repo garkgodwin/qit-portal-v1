@@ -1,14 +1,16 @@
 import React from "react";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import InfoCard from "../../components/cards/InfoCard";
 
 const StudentsHome = () => {
   const auth = useSelector((state) => state.auth);
   const { students } = useSelector((state) => state.data);
-  useEffect(() => {
-    console.log(students);
-  }, [students]);
+  const navigate = useNavigate();
+  const handleNewStudent = () => {
+    console.log("WTF");
+    navigate("/students/form");
+  };
   return (
     <>
       <div className="page-filters">
@@ -44,7 +46,15 @@ const StudentsHome = () => {
       </div>
       <div className="page-functions functions">
         {auth.loggedInPerson.user.role === 1 ? (
-          <button className="function">Create new student</button>
+          <button
+            className="function"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNewStudent();
+            }}
+          >
+            Create new student
+          </button>
         ) : (
           <div className="function-tip">
             Only admin can add or update students details.

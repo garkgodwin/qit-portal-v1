@@ -24,7 +24,7 @@ module.exports = ({ Schema, model }) => {
           ref: "schedules",
         },
       ],
-      studentType: Number, // 1 - college, 2 - highschool
+      studentType: Number, // 1 - college, 2 - Senior highschool, 3 - Junior Highschool
       guardians: [
         {
           type: Schema.Types.ObjectId,

@@ -45,9 +45,21 @@ exports.getAllStaffs = async (req, res) => {
   });
 };
 exports.getStaffDetailsForUpdate = async (req, res) => {
-  const id = req.params.userID;
-  const user = await UserModel.findById(id);
-  const person = await PersonModel.findOne({ user: id });
+  const id = req.params.personID;
+  const user = await UserModel.findOne({
+    person: id,
+  });
+  if (!user) {
+    return res.status(404).send({
+      message: "User does not exist",
+    });
+  }
+  const person = await PersonModel.findOne({ _id: id });
+  if (!person) {
+    return res.status(404).send({
+      message: "Person does not exist",
+    });
+  }
   if (user.role === 3) {
     const instructor = await InstructorModel.findOne({ user: id });
     return res.status(200).send({

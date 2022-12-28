@@ -3,7 +3,13 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { startFormLoading, stopFormLoading } from "../../features/loadingSlice";
 import Form from "../../components/forms/Form";
-import { getStaffDetailsForUpdate } from "../../api/staffs";
+import {
+  getStaffDetailsForUpdate,
+  updateStaffDetails,
+  createStaffDetails,
+} from "../../api/staffs";
+import { showToast } from "../../features/toastSlice";
+import { append, update } from "../../features/dataSlice";
 
 const StaffForm = () => {
   const dispatch = useDispatch();
@@ -36,6 +42,7 @@ const StaffForm = () => {
     if (data.selectedData !== null) {
       fetchData();
     }
+    // eslint-disable-next-line
   }, [data]);
 
   const fetchData = async () => {
@@ -48,7 +55,10 @@ const StaffForm = () => {
       const user = d.user;
       setInputs({
         staff: staff,
-        person: person,
+        person: {
+          ...person,
+          birthDate: new Date(person.birthDate).toISOString().substring(0, 10),
+        },
         user: user,
       });
     } else {
@@ -64,8 +74,37 @@ const StaffForm = () => {
     if (data.selectedData === null) {
       //? create new staff
       // submit only the person and user details
+      const result = await createStaffDetails(inputs);
+      dispatch(
+        showToast({
+          body: result.message,
+        })
+      );
+      if (result.status === 200) {
+        dispatch(
+          append({
+            removeAppend: "staff",
+            data: result.data,
+          })
+        );
+        navigate("/staffs");
+      }
     } else {
       //? update staff details
+      const result = await updateStaffDetails(data.selectedData, inputs);
+      dispatch(
+        showToast({
+          body: result.message,
+        })
+      );
+      if (result.status === 200) {
+        dispatch(
+          update({
+            updateType: "staff",
+            data: result.data,
+          })
+        );
+      }
     }
     dispatch(stopFormLoading());
   };

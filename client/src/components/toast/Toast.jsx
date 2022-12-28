@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { hideToast } from "../../features/toastSlice";
 import "./Toast.css";
@@ -9,6 +10,17 @@ const Toast = () => {
   const handleClose = () => {
     dispatch(hideToast());
   };
+
+  useEffect(() => {
+    if (toast.shown) {
+      setTimeout(() => {
+        dispatch(hideToast());
+      }, 5000);
+    } else {
+      window.clearTimeout();
+    }
+    // eslint-disable-next-line
+  }, [toast]);
   return (
     <div className="Toast">
       <h3 className="toast-title">{toast.title}</h3>

@@ -7,9 +7,9 @@ module.exports = (app) => {
 
   router.get("/", controller.getAllStaffs);
   router.get("/instructors", controller.getAllInstructors);
-  router.get("/:userID", controller.getStaffDetailsForUpdate);
+  router.get("/:personID", controller.getStaffDetailsForUpdate);
   router.put("/:userID", controller.updateStaffDetails);
-  router.post("/new", controller.createStaff);
+  router.post("/", controller.createStaff);
   router.get("/:personID", controller.getStaff);
   router.delete(
     "/instructors/:instructorID/subject-groups/:subjectGroupID",

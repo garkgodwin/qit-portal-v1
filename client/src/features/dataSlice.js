@@ -62,6 +62,14 @@ export const dataSlice = createSlice({
             return acc;
           }
         });
+      } else if (t === "staff") {
+        state.staffs = state.staffs.map((acc) => {
+          if (acc._id === d._id) {
+            return d;
+          } else {
+            return acc;
+          }
+        });
       }
     },
     append: (state, action) => {

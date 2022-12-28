@@ -32,22 +32,59 @@ export const getAllInstructors = async () => {
     })
     .catch((error) => {
       let status = 500;
-      let message = "";
+      let message = "Something went wrong";
       if (error.response) {
         let r = error.response;
         status = r.status;
         message = r.data.message;
-      } else {
-        result = {
-          ...result,
-          status: 500,
-          message: "Something went wrong",
-        };
       }
+      result = {
+        ...result,
+        status: status,
+        message: message,
+      };
     });
   return result;
 };
 
+export const createStaffDetails = async (data) => {
+  const token = localStorage.getItem("token");
+  let result = {
+    status: 0,
+    message: "",
+    data: null,
+  };
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  await api
+    .post(ROOT, data, config)
+    .then((res) => {
+      const resData = res.data;
+      const data = resData.data;
+      const message = resData.message;
+      const status = res.status;
+      result = {
+        ...result,
+        status: status,
+        message: message,
+        data: data,
+      };
+    })
+    .catch((error) => {
+      const { data, status } = error.response;
+      const message = data.message;
+      result = {
+        ...result,
+        status: status,
+        message: message,
+      };
+    });
+  return result;
+};
 export const getStaffDetailsForUpdate = async (userID) => {
   const token = localStorage.getItem("token");
   let result = {

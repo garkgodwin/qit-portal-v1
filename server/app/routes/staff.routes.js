@@ -9,10 +9,6 @@ module.exports = (app) => {
   router.get("/instructors", controller.getAllInstructors);
   router.post("/new", controller.createStaff);
   router.get("/:personID", controller.getStaff);
-  router.post(
-    "/instructors/:instructorID/subjectGroups",
-    controller.createSubjectGroup
-  );
   router.delete(
     "/instructors/:instructorID/subject-groups/:subjectGroupID",
     controller.deleteSubjectGroup
@@ -32,6 +28,9 @@ module.exports = (app) => {
     "/instructors/:instructorID/subject-groups/:subjectGroupID/students/:studentID/subjects/:subjectCode",
     controller.deleteGradeByInstructor
   );
+
+  // subject groups
+  router.post("/subjectGroups", controller.createSubjectGroup);
 
   app.use("/api/v1/staffs", router);
 };

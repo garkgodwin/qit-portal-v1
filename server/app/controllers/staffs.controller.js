@@ -96,7 +96,6 @@ exports.getStaff = async (req, res) => {
 };
 exports.createSubjectGroup = async (req, res) => {
   const b = req.body;
-  const instructorID = req.params.instructorID;
   const currentSD = await SchoolDataModel.findOne({
     current: true,
     locked: false,
@@ -109,7 +108,7 @@ exports.createSubjectGroup = async (req, res) => {
 
   const newSubjectGroup = SissModel({
     subjectCode: b.subjectCode,
-    instructor: instructorID,
+    instructor: b.instructor,
     students: [],
     schedules: [],
     schoolData: currentSD._id,

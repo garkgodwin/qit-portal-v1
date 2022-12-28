@@ -51,7 +51,7 @@ const Login = () => {
           <h1>Welcome! Please login to continue</h1>
         </div>
         <div className="form-body">
-          <div className="input-fields">
+          <div className="input-fields input-fields-center">
             <div className="input-field">
               <label>Username/email/student-id</label>
               <input
@@ -66,7 +66,7 @@ const Login = () => {
               />
             </div>
           </div>
-          <div className="input-fields">
+          <div className="input-fields input-fields-center">
             <div className="input-field">
               <label>Password</label>
               <div className="input-password">

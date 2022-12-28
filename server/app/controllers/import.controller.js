@@ -191,6 +191,8 @@ exports.createStudents = async (req, res) => {
     newStudent.guardians = [newGuardian._id];
     //? guardian update
     newGuardian.students = [newStudent._id];
+    newGuardian.user = newGuardianUser._id;
+    newGuardian.person = newGuardianPerson._id;
     newGuardianPerson.user = newGuardianUser._id;
     newGuardianUser.person = newGuardianPerson._id;
 

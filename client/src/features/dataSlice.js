@@ -2,12 +2,19 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   selectedData: null,
+  selectedType: "",
+  /*
+   "accounts", "staffs", "instructors" , "students", "subjects", "subject-groups", ""
+    
+ */
   accounts: [],
   staffs: [],
+  instructors: [],
   students: [],
   subjects: [],
   subjectGroups: [],
-  populateType: 0, // 1 - accounts, 2- staffs , 3 - students, 4 - subjects, 5- subjectGroups, 0 - for none
+  rooms: [],
+  populateType: 0, // 1 - accounts, 2- staffs , 3 - students, 4 - subjects, 5- subjectGroups, 6- rooms, 0 - for none
 };
 
 export const dataSlice = createSlice({
@@ -15,10 +22,13 @@ export const dataSlice = createSlice({
   initialState,
   reducers: {
     select: (state, action) => {
-      state.selectedData = action.payload.data;
+      const p = action.payload;
+      state.selectedData = p.data;
+      state.selectedType = p.selectedType;
     },
-    unSelect: (state, action) => {
+    unSelect: (state) => {
       state.selectedData = null;
+      state.selectedType = 0;
     },
     populate: (state, action) => {
       const p = action.payload;
@@ -29,49 +39,63 @@ export const dataSlice = createSlice({
       } else if (t === 2) {
         state.staffs = d;
       } else if (t === 3) {
-        state.students = d;
+        state.instructors = d;
       } else if (t === 4) {
-        state.subjects = d;
+        state.students = d;
       } else if (t === 5) {
+        state.subjects = d;
+      } else if (t === 6) {
         state.subjectGroups = d;
+      } else if (t === 7) {
+        state.rooms = d;
+      }
+    },
+    update: (state, action) => {
+      const p = action.payload;
+      const t = p.updateType;
+      const d = p.data;
+      if (t === "account") {
+        state.accounts = state.accounts.map((acc) => {
+          if (acc._id === d._id) {
+            return d;
+          } else {
+            return acc;
+          }
+        });
       }
     },
     append: (state, action) => {
       const p = action.payload;
-      const t = p.populateType;
+      const t = p.removeAppend;
       const d = p.data;
-      if (t === 1) {
+      if (t === "account") {
         state.accounts.push(d);
-      } else if (t === 2) {
+      } else if (t === "staff") {
         state.staffs.push(d);
-      } else if (t === 3) {
+      } else if (t === "student") {
         state.students.push(d);
-      } else if (t === 4) {
-        state.subjects.push(d);
-      } else if (t === 5) {
+      } else if (t === "subjectGroup") {
         state.subjectGroups.push(d);
       }
     },
     remove: (state, action) => {
       localStorage.clear();
       const p = action.payload;
-      const t = p.populateType;
+      const t = p.removeAppend;
       const d = p.data;
-      if (t === 1) {
+      if (t === "account") {
         state.accounts = state.accounts.filter((item) => {
           return item._id !== d._id;
         });
-      } else if (t === 2) {
+      } else if (t === "staff") {
         state.staffs = state.staffs.filter((item) => {
           return item._id !== d._id;
         });
-      } else if (t === 3) {
+      } else if (t === "student") {
         state.students = state.students.filter((item) => {
           return item._id !== d._id;
         });
-      } else if (t === 4) {
-        // do nothing
-      } else if (t === 5) {
+      } else if (t === "subjectGroup") {
         state.subjectGroups = state.subjectGroups.filter((item) => {
           return item._id !== d._id;
         });
@@ -81,6 +105,7 @@ export const dataSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { select, unSelect, populate, append, remove } = dataSlice.actions;
+export const { select, unSelect, populate, update, append, remove } =
+  dataSlice.actions;
 
 export default dataSlice.reducer;

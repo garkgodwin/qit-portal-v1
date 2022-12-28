@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import InfoCard from "../../components/cards/InfoCard";
 
 const StudentsHome = () => {
+  const auth = useSelector((state) => state.auth);
   const { students } = useSelector((state) => state.data);
   useEffect(() => {
     console.log(students);
@@ -42,7 +43,13 @@ const StudentsHome = () => {
         </div>
       </div>
       <div className="page-functions functions">
-        <button className="function">Create new student</button>
+        {auth.loggedInPerson.user.role === 1 ? (
+          <button className="function">Create new student</button>
+        ) : (
+          <div className="function-tip">
+            Only admin can add or update students details.
+          </div>
+        )}
       </div>
     </>
   );

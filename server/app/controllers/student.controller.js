@@ -74,6 +74,9 @@ exports.getStudent = async (req, res) => {
     .populate({
       path: "guardians",
     })
+    .populate({
+      path: "currentSchoolData",
+    })
     .then((data) => {
       student = data;
     })

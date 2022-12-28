@@ -56,9 +56,11 @@ module.exports = (app) => {
   );
 
   router.get(
-    "/details-for-update/:userID/:type",
+    "/:userID",
     // [authJwt.verifyToken],
     controller.getDetailsForUpdate
   );
+  router.put("/:userID", controller.updateAccountDetails);
+  router.put("/lock-unlock/:userID", controller.lockUnlockAccount);
   app.use("/api/v1/users", router);
 };

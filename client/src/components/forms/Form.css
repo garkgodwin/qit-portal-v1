@@ -3,10 +3,12 @@ form{
   color: var(--color-10);
   box-shadow: 0 0 8px;
   width: 600px;
-  height: 600px;
+  min-height: 400px;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: relative !important;
 }
 
 .form-title{
@@ -24,37 +26,53 @@ form{
   height: 100%;
   padding: 8px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   flex-direction: column;
 }
 .input-fields{
+  width: 100%;
   margin-top: 24px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.input-fields.input-fields-center{
+  justify-content: center;
 }
 .input-field{
   display: flex;
   flex-direction: column;
-  margin-top: 4px;
+  margin: 4px;
   width: 200px;
   border-bottom: 1px solid var(--color-30);
   position: relative;
   background-color: var(--color-60);
+}
+
+.input-field.input-field-100{
+  width: 100%;
+}
+.input-field.input-field-50{
+  width: 45%;
 }
 .input-field label{
   font-size: 12px;
   font-weight: 400;
   background-color: transparent;
 }
-.input-field input{
+.input-field input, .input-field select{
   font-size: 16px;
   border: none;
   outline: none;
   padding: 4px;
   width: auto;
   background-color: transparent;
-
 }
 
+.input-field select option span{
+  margin: 4px;
+}
 .input-field .input-password{
   display: flex;
   flex-direction: row;
@@ -75,7 +93,7 @@ form{
   padding: 8px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 }
 .form-function{
@@ -86,5 +104,5 @@ form{
   padding: 8px;
 }
 .form-function-login{
-  width: 100%;
+  width: 50%;
 }

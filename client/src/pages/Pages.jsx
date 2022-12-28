@@ -17,6 +17,8 @@ import PageStaffSForm from "./Staffs/StaffForm";
 import PageStudents from "./Students/Student";
 import PageStudentsHome from "./Students/StudentsHome";
 import PageStudentsForm from "./Students/StudentsForm";
+import PageStudentsInfo from "./Students/StudentsInfo";
+import PageStudentsSubjects from "./Students/StudentsSubjects";
 
 import PageSubjects from "./Subjects/Subjects";
 import PageSubjectsHome from "./Subjects/SubjectsHome";
@@ -51,6 +53,8 @@ const Pages = () => {
           <Route path="students" element={<PageStudents />}>
             <Route path="" element={<PageStudentsHome />} />
             <Route path="form" element={<PageStudentsForm />} />
+            <Route path="info" element={<PageStudentsInfo />} />
+            <Route path="subjects" element={<PageStudentsSubjects />} />
           </Route>
           <Route path="subjects" element={<PageSubjects />}>
             <Route path="" element={<PageSubjectsHome />} />

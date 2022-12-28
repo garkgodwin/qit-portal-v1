@@ -19,7 +19,8 @@ import { populate } from "./features/dataSlice";
 import { authenticate as apiAuthenticate } from "./api/auth";
 import { getAllUsers, getAllStaffs } from "./api/user";
 import { getAllStudents } from "./api/student";
-import { getAllSubjects, getAllClasses } from "./api/general";
+import { getAllInstructors } from "./api/staffs";
+import { getAllSubjects, getAllClasses, getAllRooms } from "./api/general";
 
 function App() {
   const dispatch = useDispatch();
@@ -89,11 +90,21 @@ function App() {
       );
     }
 
+    const instructorsResult = await getAllInstructors();
+    if (instructorsResult.status === 200) {
+      dispatch(
+        populate({
+          populateType: 3,
+          data: instructorsResult.data,
+        })
+      );
+    }
+
     const studentsResult = await getAllStudents();
     if (studentsResult.status === 200) {
       dispatch(
         populate({
-          populateType: 3,
+          populateType: 4,
           data: studentsResult.data,
         })
       );
@@ -103,7 +114,7 @@ function App() {
     if (subjectsResult.status === 200) {
       dispatch(
         populate({
-          populateType: 4,
+          populateType: 5,
           data: subjectsResult.data,
         })
       );
@@ -112,8 +123,17 @@ function App() {
     if (subjectGroupsResult.status === 200) {
       dispatch(
         populate({
-          populateType: 5,
+          populateType: 6,
           data: subjectGroupsResult.data,
+        })
+      );
+    }
+    const roomsResult = await getAllRooms();
+    if (roomsResult.status === 200) {
+      dispatch(
+        populate({
+          populateType: 7,
+          data: roomsResult.data,
         })
       );
     }

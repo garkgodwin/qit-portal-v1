@@ -34,15 +34,18 @@ const getAllSubjectGroups = async (req, res) => {
       message: "There are no active school data.",
     });
   }
+  const popObj = {
+    path: "instructor",
+    populate: {
+      path: "person",
+      // select: "name",
+    },
+  };
+
   const classes = await SubjectGroupModel.find({
     schoolData: schoolData._id,
   })
-    .populate({
-      path: "instructor",
-    })
-    .populate({
-      path: "person",
-    })
+    .populate(popObj)
     .exec();
 
   return res.status(200).send({

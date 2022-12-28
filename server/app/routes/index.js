@@ -9,4 +9,5 @@ module.exports = (app) => {
   require("./student.routes")(app); // student actions
   require("./notification.routes")(app); // notification actions
   require("./school.routes")(app); // school actions
+  require("./subjectGroup.routes")(app); // class actions
 };

@@ -1,11 +1,19 @@
 import React from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import InfoCard from "../../components/cards/InfoCard";
 
 const SubjectGroupsHome = () => {
+  const navigate = useNavigate();
   const { subjectGroups } = useSelector((state) => state.data);
 
+  useEffect(() => {
+    console.log(subjectGroups);
+  }, [subjectGroups]);
+  const handleCreateClass = () => {
+    navigate("/classes/form");
+  };
   return (
     <>
       <div className="page-filters">
@@ -49,7 +57,15 @@ const SubjectGroupsHome = () => {
         </div>
       </div>
       <div className="page-functions functions">
-        <button className="function">Create new class</button>
+        <button
+          className="function"
+          onClick={(e) => {
+            e.preventDefault();
+            handleCreateClass();
+          }}
+        >
+          Create new class
+        </button>
       </div>
     </>
   );

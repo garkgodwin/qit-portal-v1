@@ -133,6 +133,70 @@ exports.getDetailsForUpdate = async (req, res) => {
     });
   }
 };
+exports.updateAccountDetails = async (req, res) => {
+  const b = req.body;
+  const userID = req.params.userID;
+  const usernameExists = await UserModel.findOne({
+    $and: [
+      {
+        username: b.username,
+      },
+      {
+        _id: { $ne: userID },
+      },
+    ],
+  }).exec();
+  if (usernameExists) {
+    return res.status(409).send({
+      message: "Person with this username already exists",
+    });
+  }
+  const emailExists = await UserModel.findOne({
+    $and: [
+      {
+        email: b.email,
+      },
+      {
+        _id: { $ne: userID },
+      },
+    ],
+  }).exec();
+  if (emailExists) {
+    return res.status(409).send({
+      message: "Person with this email already exists",
+    });
+  }
+
+  await UserModel.findOneAndUpdate(
+    { _id: userID },
+    {
+      username: b.username,
+      email: b.email,
+    }
+  ).exec();
+
+  const updatedAccount = await UserModel.findById(userID).populate("person");
+
+  return res.status(200).send({
+    message: "Successfully updated the email and username of this person",
+    data: updatedAccount,
+  });
+};
+exports.lockUnlockAccount = async (req, res) => {
+  const userID = req.params.userID;
+  const user = await UserModel.findById(userID).populate({
+    path: "person",
+  });
+  user.locked = !user.locked;
+  user.save();
+
+  return res.status(200).send({
+    message: `Successfully ${
+      user.locked ? "locked" : "unlocked"
+    } this account.`,
+    data: user,
+  });
+};
 exports.getStaffs = async (req, res) => {
   await UserModel.find({})
     .populate("person")

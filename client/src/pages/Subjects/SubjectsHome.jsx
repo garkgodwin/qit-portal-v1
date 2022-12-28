@@ -1,5 +1,4 @@
 import React from "react";
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import InfoCard from "../../components/cards/InfoCard";
 

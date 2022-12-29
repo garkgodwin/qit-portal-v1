@@ -14,10 +14,11 @@ import InfoCardField from "./InfoCardField";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { select as selectData } from "../../features/dataSlice";
+import { remove, select as selectData } from "../../features/dataSlice";
 import { update } from "../../features/dataSlice";
 import { showToast } from "../../features/toastSlice";
 import { lockOrUnlockAccount } from "../../api/user";
+import { removeSubjectGroup } from "../../api/subjectGroup";
 
 const InfoCard = ({ data, type }) => {
   const dispatch = useDispatch();
@@ -122,6 +123,35 @@ const InfoCard = ({ data, type }) => {
       })
     );
     navigate("/subjects/classes");
+  };
+
+  //? CLASSES
+  const handleRemoveClass = async () => {
+    const subjectGroupID = data._id;
+    const result = await removeSubjectGroup(subjectGroupID);
+    dispatch(
+      showToast({
+        body: result.message,
+      })
+    );
+    if (result.status === 200) {
+      dispatch(
+        remove({
+          removeAppend: "subjectGroup",
+          data: data,
+        })
+      );
+    }
+  };
+  const handleAddStudentToClass = async () => {
+    const subjectGroupID = data._id;
+    dispatch(
+      selectData({
+        data: subjectGroupID,
+        selectedType: "class-info",
+      })
+    );
+    navigate("/classes/info");
   };
   return (
     <div className="InfoCard">
@@ -327,8 +357,24 @@ const InfoCard = ({ data, type }) => {
               text={getFormattedDate(data.updatedAt)}
               title="Updated Date"
             />
-            <button className="info-card-function">Remove Class</button>
-            <button className="info-card-function">Add students</button>
+            <button
+              className="info-card-function"
+              onClick={(e) => {
+                e.preventDefault();
+                handleRemoveClass();
+              }}
+            >
+              Remove Class
+            </button>
+            <button
+              className="info-card-function"
+              onClick={(e) => {
+                e.preventDefault();
+                handleAddStudentToClass();
+              }}
+            >
+              Add students
+            </button>
           </div>
         </>
       ) : (

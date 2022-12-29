@@ -57,6 +57,42 @@ exports.createSubjectGroup = async (req, res) => {
     data: subGroup,
   });
 };
+exports.getClassDetails = async (req, res) => {
+  const id = req.params.subjectGroupID;
+  const currentSD = await SchoolDataModel.findOne({
+    current: true,
+    locked: false,
+  });
+  if (!currentSD) {
+    return res.status(404).send({
+      message: "There are no active school data",
+    });
+  }
+
+  const popObj = {
+    path: "instructor",
+    populate: {
+      path: "person",
+      // select: "name",
+    },
+  };
+
+  const popObj1 = {
+    path: "students",
+    populate: {
+      path: "person",
+    },
+  };
+
+  const subGroup = await SissModel.findById(id)
+    .populate(popObj)
+    .populate(popObj1);
+
+  return res.status(200).send({
+    message: "Successfully fetched the full details of this subject group",
+    data: subGroup,
+  });
+};
 
 exports.getSubjectGroupsOfThisSubject = async (req, res) => {
   const code = req.params.code;
@@ -95,5 +131,25 @@ exports.getSubjectGroupsOfThisSubject = async (req, res) => {
   return res.status(200).send({
     message: "Successfully fetched the classes of this subject",
     data: classes,
+  });
+};
+
+exports.removeSubjectGroup = async (req, res) => {
+  const id = req.params.subjectGroupID;
+  const currentSD = await SchoolDataModel.findOne({
+    current: true,
+    locked: false,
+  });
+  if (!currentSD) {
+    return res.status(404).send({
+      message: "There are no active school data",
+    });
+  }
+
+  await SissModel.findById(id).remove().exec();
+  await Schedu;
+
+  return res.status(200).send({
+    message: "Successfully deleted this class",
   });
 };

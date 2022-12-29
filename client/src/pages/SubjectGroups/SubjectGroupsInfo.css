@@ -1,0 +1,99 @@
+.class-box{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+.class-headers{
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.class-header{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.class-header span{
+  border-top: 1px solid var(--color-30);
+}
+.class-body{
+  width: 100%;
+  border: 1px solid var(--color-30);
+  box-shadow: inset 0 0 8px;
+  margin-top: 40px;
+  height: 100%;
+  overflow: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  position: relative;
+}
+.class-body .class-body-title{
+  width: 100%;
+  height: 24px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.class-student, .class-student-plus{
+  width: 164px;
+  height: 164px;
+  padding: 8px;
+  margin: 8px;
+  box-shadow: 0 0 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.class-student-field{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.class-student-functions{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+}
+.class-function{
+  background-color: var(--color-60);
+  color: var(--color-30);
+  border: 1px solid var(--color-30);
+  margin: 2px;
+  padding: 4px;
+  width: 100px;
+  height: 32px;
+}
+.class-function:hover{
+  background-color: var(--color-30);
+  color: var(--color-60)
+}
+
+
+.class-student-plus button{
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-60);
+  color: var(--color-30);
+  font-size: 40px;
+}
+.class-student-plus button:hover{
+  background-color: var(--color-30);
+  color: var(--color-60)
+}

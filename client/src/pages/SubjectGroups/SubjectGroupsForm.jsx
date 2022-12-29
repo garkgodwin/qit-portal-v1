@@ -30,7 +30,7 @@ const SubjectGroupsForm = () => {
     if (result.status === 200) {
       dispatch(
         append({
-          populateType: 5,
+          removeAppend: "subjectGroup",
           data: result.data,
         })
       );

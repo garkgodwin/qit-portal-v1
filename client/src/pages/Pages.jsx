@@ -27,6 +27,7 @@ import PageSubjectsForm from "./Subjects/SubjectsForm";
 import PageSubjectGroups from "./SubjectGroups/SubjectGroups";
 import PageSubjectGroupsHome from "./SubjectGroups/SubjectGroupsHome";
 import PageSubjectGroupsForm from "./SubjectGroups/SubjectGroupsForm";
+import PageSubjectGroupsInfo from "./SubjectGroups/SubjectGroupsInfo";
 
 const Pages = () => {
   const auth = useSelector((state) => state.auth);
@@ -63,6 +64,7 @@ const Pages = () => {
           <Route path="classes" element={<PageSubjectGroups />}>
             <Route path="" element={<PageSubjectGroupsHome />} />
             <Route path="form" element={<PageSubjectGroupsForm />} />
+            <Route path="info" element={<PageSubjectGroupsInfo />} />
           </Route>
           <Route path="*" element={<PageNotFound />} />
         </Routes>

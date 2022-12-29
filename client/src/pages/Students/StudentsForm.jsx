@@ -5,7 +5,7 @@ import Form from "../../components/forms/Form";
 import { checkStudentCreation } from "../../helpers/checkInputs";
 
 //? GLOBAL STATES
-import { append } from "../../features/dataSlice";
+import { append, update } from "../../features/dataSlice";
 import { showToast } from "../../features/toastSlice";
 import { startFormLoading, stopFormLoading } from "../../features/loadingSlice";
 
@@ -13,9 +13,14 @@ import { startFormLoading, stopFormLoading } from "../../features/loadingSlice";
 import {
   createNewStudent,
   getStudentDetailsForUpdate,
+  updateStudentDetails,
+  createNewGuardian,
 } from "../../api/student";
+import { getCurrentSchoolData } from "../../api/school";
 
 const StudentsForm = () => {
+  const [formType, setFormType] = useState("");
+  const [canUpdateStudentDetails, setCanUpdateStudentDetails] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const data = useSelector((state) => state.data);
@@ -24,7 +29,7 @@ const StudentsForm = () => {
     email: "",
   });
   const [guardianData, setGuardianData] = useState({
-    guardianType: "",
+    guardianType: 1,
   });
   const [studentData, setStudentData] = useState({
     studentType: 1,
@@ -48,32 +53,53 @@ const StudentsForm = () => {
 
   useEffect(() => {
     if (data.selectedData !== null) {
-      console.log("Selected data:", data.selectedData);
-      console.log("Type of selected data:", data.selectedType);
       if (data.selectedType === "student-update-details") {
-        fetchStudentDetails();
+        fetchCurrentSchoolData();
+        setFormType("student-update");
+        fetchStudentDetailsForUpdate();
+      } else if (data.selectedType === "student-add-guardian") {
+        setFormType("student-create-guardian");
       }
+    } else {
+      setFormType("student-create");
     }
   }, [data]);
-  const fetchStudentDetails = async () => {
+
+  //? This block of code will help to check whether we should show student details or not.
+  const fetchCurrentSchoolData = async () => {
+    const result = await getCurrentSchoolData();
+    console.log(result);
+    if (result.status === 200) {
+      setCanUpdateStudentDetails(false);
+    } else {
+      setCanUpdateStudentDetails(true);
+    }
+  };
+  //? This block of code will fetch the students details for update
+  const fetchStudentDetailsForUpdate = async () => {
     dispatch(startFormLoading());
     const result = await getStudentDetailsForUpdate(data.selectedData);
     if (result.status === 200) {
       const student = result.data;
       const person = student.person;
-      console.log(person);
+      const cd = student.currentSchoolData;
+      if (cd.current && !cd.locked) {
+        // update person details only
+      } else {
+        // can update student details as well
+        setStudentData({
+          studentType: student.studentType,
+          course: student.course,
+          yearLevel: student.yearLevel,
+          section: student.section,
+        });
+      }
       setPersonData({
         name: person.name,
         age: person.age,
         birthDate: person.birthDate,
         gender: person.gender,
-        mobileNumber: person.mobileNumber,
-      });
-      setStudentData({
-        studentType: student.studentType,
-        course: student.course,
-        yearLevel: student.yearLevel,
-        section: student.section,
+        mobileNumber: person.mobileNumber ? person.mobileNumber : "",
       });
     } else {
       navigate("/students");
@@ -81,6 +107,7 @@ const StudentsForm = () => {
     dispatch(stopFormLoading());
   };
 
+  //? when the student type changes, the other student details will be reverted back to 'None'
   useEffect(() => {
     setStudentData({
       ...studentData,
@@ -89,13 +116,18 @@ const StudentsForm = () => {
     });
   }, [studentData.studentType]);
 
+  //? This block will navigate back to the home of students
   const handleCancel = () => {
     navigate("/students");
   };
 
+  /* This block will handle the submit button:
+    1. Create student
+    2. Update student
+    3. New Guardian
+  */
   const handleSubmit = async () => {
-    //TODO: check what is selectedData
-    //TODO: check if for update
+    console.log(data.selectedType);
     dispatch(startFormLoading());
     if (data.selectedData === null) {
       //? CREATE NEW STUDENT
@@ -136,32 +168,75 @@ const StudentsForm = () => {
       }
     } else {
       //? check what to do - maybe it is not update
+      if (data.selectedType === "student-update-details") {
+        const inputs = {
+          student: studentData,
+          person: personData,
+        };
+        const result = await updateStudentDetails(data.selectedData, inputs);
+        dispatch(
+          showToast({
+            body: result.message,
+          })
+        );
+        if (result.status === 200) {
+          dispatch(
+            update({
+              updateType: "student",
+              data: result.data,
+            })
+          );
+          navigate("/students");
+        }
+      } else if (data.selectedType === "student-add-guardian") {
+        const inputs = {
+          user: userData,
+          person: personData,
+          guardian: guardianData,
+        };
+        const result = await createNewGuardian(data.selectedData, inputs);
+        dispatch(
+          showToast({
+            body: result.message,
+          })
+        );
+        if (result.status === 200) {
+          dispatch(
+            update({
+              updateType: "student",
+              data: result.data,
+            })
+          );
+        }
+      }
     }
     dispatch(stopFormLoading());
   };
 
   const showUserFields = () => {
-    if (data.selectedData === null) {
+    if (
+      formType === "student-create" ||
+      formType === "student-create-guardian"
+    ) {
       // it means for creationg
       return userFields();
     }
   };
   const showStudentFields = () => {
     if (
-      data.selectedData === null ||
-      data.selectedType === "student-update-details"
+      formType === "student-create" ||
+      (formType === "student-update" && canUpdateStudentDetails)
     ) {
-      // it means for creationg
-      return studentFields();
+      return studentFields;
     }
   };
   const showPersonFields = () => {
     if (
-      data.selectedData === null ||
-      data.selectedType === "student-update-details"
-    ) {
+      formType === "student-create" ||
+      formType === "student-update" ||
+      formType === "student-create-guardian"
+    )
       return personFields();
-    }
   };
 
   const userFields = () => {
@@ -196,6 +271,24 @@ const StudentsForm = () => {
             }}
           />
         </div>
+        {formType === "student-create-guardian" && (
+          <div className="input-field">
+            <label>Guardian Type</label>
+            <select
+              value={guardianData.guardianType}
+              onChange={(e) => {
+                setGuardianData({
+                  ...guardianData,
+                  guardianType: parseInt(e.target.value),
+                });
+              }}
+            >
+              <option value={1}>Father</option>
+              <option value={2}>Mother</option>
+              <option value={3}>Other</option>
+            </select>
+          </div>
+        )}
       </div>
     );
   };

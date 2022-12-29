@@ -70,6 +70,12 @@ export const dataSlice = createSlice({
             return acc;
           }
         });
+      } else if (t === "student") {
+        state.students = state.students.map((acc) => {
+          if (acc._id === d._id) {
+            return d;
+          } else return acc;
+        });
       }
     },
     append: (state, action) => {

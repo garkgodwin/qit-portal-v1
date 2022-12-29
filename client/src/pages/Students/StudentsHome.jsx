@@ -7,8 +7,9 @@ const StudentsHome = () => {
   const auth = useSelector((state) => state.auth);
   const { students } = useSelector((state) => state.data);
   const navigate = useNavigate();
+
+  console.log(students);
   const handleNewStudent = () => {
-    console.log("WTF");
     navigate("/students/form");
   };
   return (

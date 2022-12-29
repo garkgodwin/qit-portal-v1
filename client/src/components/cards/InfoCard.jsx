@@ -91,15 +91,12 @@ const InfoCard = ({ data, type }) => {
     navigate("/students/form");
   };
 
-  const handleStudentMove = () => {
-    // const studentID = data._id;
-    //TODO: DO THIS MOVE TO NEXT SEM
-  };
   const handleViewStudentInfo = () => {
+    const studentID = data._id;
     dispatch(
       selectData({
-        selectedType: "view-student-info",
-        data: data._id,
+        selectedType: "student-view-info",
+        data: studentID,
       })
     );
     navigate("/students/info");
@@ -228,15 +225,6 @@ const InfoCard = ({ data, type }) => {
                   }}
                 >
                   Update student details
-                </button>
-                <button
-                  className="info-card-function"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleStudentMove();
-                  }}
-                >
-                  Move to current SY and Sem
                 </button>
               </>
             )}

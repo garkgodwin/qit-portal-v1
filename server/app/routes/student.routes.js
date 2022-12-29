@@ -7,10 +7,11 @@ module.exports = (app) => {
 
   router.get("/", controller.getAllStudents);
   router.get("/for-update/:studentID", controller.getStudentForUpdate);
+  router.put("/for-update/:studentID", controller.updateStudent);
+  router.post("/:studentID/new-guardian", controller.createNewGuardian);
+  router.get("/full-info/:studentID", controller.getStudentFullInfo);
   router.get("/:studentID/:subjectCode", controller.getStudentSubjectGrades);
   router.post("/", controller.createStudent);
-  router.put("/update/:studentID", controller.updateStudent);
-  router.post("/new-guardian/:studentID", controller.createGuardian);
 
   //? BULK FOR STUDENTS - UPDATES SCHOOL DATA
   router.put("/school-data-update", controller.updateStudentsSchoolData);

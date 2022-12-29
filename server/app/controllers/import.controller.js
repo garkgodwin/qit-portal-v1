@@ -104,6 +104,7 @@ exports.createStudents = async (req, res) => {
     const age = values.age;
     const birthDate = values.birthDate;
     const gender = values.gender;
+    const mobileNumber = "09362101653";
     // student user data
     const username = values.username;
     const password = "Qwerty123";
@@ -123,6 +124,7 @@ exports.createStudents = async (req, res) => {
     const gAge = guardians[guardianIndex].age;
     const gBirthDate = guardians[guardianIndex].birthDate;
     const gGender = guardians[guardianIndex].gender;
+    const gMobileNumber = "09362101653";
     // student - guardian user;
     const gUsername = guardians[guardianIndex].username;
     const gPassword = "Qwerty123";
@@ -147,6 +149,7 @@ exports.createStudents = async (req, res) => {
       age: age,
       birthDate: birthDate,
       gender: gender,
+      mobileNumber: mobileNumber,
     });
     const newUser = UserModel({
       username: username,
@@ -177,6 +180,7 @@ exports.createStudents = async (req, res) => {
       age: gAge,
       birthDate: gBirthDate,
       gender: gGender,
+      mobileNumber: gMobileNumber,
     });
     const newGuardianUser = UserModel({
       username: gUsername,
@@ -190,6 +194,7 @@ exports.createStudents = async (req, res) => {
     const newGuardian = GuardianModel({
       guardianType: guardianType,
     });
+
     //? student update
     newPerson.user = newUser._id;
     newUser.person = newPerson._id;

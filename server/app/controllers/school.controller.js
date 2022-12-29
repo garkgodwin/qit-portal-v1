@@ -8,6 +8,22 @@ exports.getAllSchoolData = async (req, res) => {
     data: schoolData,
   });
 };
+
+exports.getCurrentSchoolData = async (req, res) => {
+  const schoolData = await SchoolDataModel.findOne({
+    current: true,
+    locked: false,
+  }).exec();
+  if (!schoolData) {
+    return res.status(404).send({
+      message: "Current school data does not exist.",
+    });
+  }
+  return res.status(200).send({
+    message: "Successfully fetched the current school data",
+    data: schoolData,
+  });
+};
 exports.createSchoolData = async (req, res) => {
   const b = req.body;
   const newSchooldData = SchoolDataModel({

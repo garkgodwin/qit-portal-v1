@@ -19,6 +19,11 @@ const {
   calculateTotalGradesForThisSemAndSY,
   calculateSubjectGrades,
 } = require("../helpers/calculate");
+const {
+  isStudentValidForCreation,
+  isStudentValidForUpdate,
+  isGuardianValidForCreation,
+} = require("../helpers/check");
 //? constants
 
 //? FETCH
@@ -64,9 +69,13 @@ exports.getAllStudents = async (req, res) => {
 };
 exports.getStudentForUpdate = async (req, res) => {
   const studentID = req.params.studentID;
-  const student = await StudentModel.findById(studentID).populate({
-    path: "person",
-  });
+  const student = await StudentModel.findById(studentID)
+    .populate({
+      path: "person",
+    })
+    .populate({
+      path: "currentSchoolData",
+    });
   return res.status(200).send({
     message: "Successfully fetched the student details for update",
     data: student,
@@ -124,16 +133,16 @@ exports.createStudent = async (req, res) => {
   const inputPerson = b.person;
   const inputStudent = b.student;
 
-  const resultEmailCheck = await checkDuplicateEmail(inputUser.email);
-  if (resultEmailCheck.status !== 200) {
-    return res.status(resultEmailCheck.status).send({
-      message: resultEmailCheck.message,
-    });
-  }
-  const resultNameCheck = await checkDuplicateName(inputPerson.name);
-  if (resultNameCheck.status !== 200) {
-    return res.status(resultNameCheck.status).send({
-      message: resultNameCheck.message,
+  const checkValidity = await isStudentValidForCreation(
+    1,
+    inputUser.username,
+    inputUser.email,
+    inputPerson.name,
+    inputPerson.mobileNumber
+  );
+  if (checkValidity.status !== 200) {
+    return res.status(checkValidity.status).message({
+      message: checkValidity.message,
     });
   }
 
@@ -208,67 +217,87 @@ exports.createStudent = async (req, res) => {
 exports.updateStudent = async (req, res) => {
   const b = req.body;
   const id = req.params.studentID;
-  const inputStudent = b;
 
-  let oldStudent = null;
-  await StudentModel.findOne({
-    _id: id,
-  })
-    .populate({
-      path: "person",
-    })
-    .populate({
-      path: "user",
-    })
-    .populate({
-      path: "guardians",
-    })
-    .then((data) => {
-      oldStudent = data;
-    })
-    .catch((error) => {
-      return res.status(500).send({
-        message: "Something went wrong",
-      });
-    });
-
-  oldStudent.course = inputStudent.course;
-  oldStudent.yearLevel = inputStudent.yearLevel;
-  oldStudent.section = inputStudent.section;
-  await oldStudent.save();
-
-  let newNotification = NotificationModel({
-    subject: "Hi! Good day!",
-    body: "Your information has been updated in the system.",
-    mobileNumber: oldStudent.person.mobileNumber,
-    email: oldStudent.user.email,
-    sent: false,
-    shootDate: new Date().toISOString().split("T")[0],
+  const currentSD = await SchoolDataModel.findOne({
+    current: true,
+    locked: false,
   });
-  await newNotification.save();
 
+  const studentInfo = await StudentModel.findById(id);
+
+  if (currentSD) {
+    // can only update person
+    const personToUpdate = await PersonModel.findById(studentInfo.person);
+    const validityCheck = await isStudentValidForUpdate(
+      2,
+      personToUpdate._id,
+      b.person.name,
+      b.person.mobileNumber
+    );
+    if (validityCheck.status !== 200) {
+      return res.status(validityCheck.status).send({
+        message: validityCheck.message,
+      });
+    }
+    personToUpdate.name = b.person.name;
+    personToUpdate.age = b.person.age;
+    personToUpdate.birthDate = b.person.birthDate;
+    personToUpdate.gender = b.person.gender;
+    personToUpdate.mobileNumber = b.person.mobileNumber;
+    await personToUpdate.save();
+    await studentInfo.save();
+  } else {
+    const person = b.person;
+    const student = b.student;
+    const personToUpdate = await PersonModel.findById(studentInfo.person);
+    const validityCheck = await isStudentValidForUpdate(
+      2,
+      personToUpdate._id,
+      b.person.name,
+      b.person.mobileNumber
+    );
+    if (validityCheck.status !== 200) {
+      return res.status(validityCheck.status).send({
+        message: validityCheck.message,
+      });
+    }
+    studentInfo.yearLevel = student.yearLevel;
+    studentInfo.section = student.section;
+    studentInfo.course = student.course;
+    student.studentType = student.studentType;
+    personToUpdate.name = person.name;
+    personToUpdate.age = person.age;
+    personToUpdate.birthDate = person.birthDate;
+    personToUpdate.gender = person.gender;
+    personToUpdate.mobileNumber = person.mobileNumber;
+    await personToUpdate.save();
+    await studentInfo.save();
+  }
+  const updatedStudent = await StudentModel.findById(id).populate({
+    path: "person",
+  });
   res.status(200).send({
     message: "Succesfuly in updated the student",
-    data: oldStudent,
+    data: updatedStudent,
   });
 };
-exports.createGuardian = async (req, res) => {
+exports.createNewGuardian = async (req, res) => {
   const b = req.body;
   const studentID = req.params.studentID;
   const inputUser = b.user;
   const inputPerson = b.person;
   const inputGuardian = b.guardian;
 
-  const resultEmailCheck = checkDuplicateEmail(inputUser.email);
-  if (resultEmailCheck.status !== 200) {
-    return res.status(resultEmailCheck.status).send({
-      message: resultEmailCheck.messsage,
-    });
-  }
-  const resultNameCheck = checkDuplicateName(inputPerson.name);
-  if (resultNameCheck.status !== 200) {
-    return res.status(resultNameCheck.status).send({
-      message: resultNameCheck.messsage,
+  const validityCheck = await isGuardianValidForCreation(
+    1,
+    inputUser.username,
+    inputUser.guardian,
+    inputPerson.name,
+    inputPerson.mobileNumber
+  );
+  if (validityCheck.status !== 200) {
+    return res.status(validityCheck.status).send({
+      message: validityCheck.message,
     });
   }
 
@@ -317,11 +346,49 @@ exports.createGuardian = async (req, res) => {
   await newNotification.save();
 
   res.status(200).send({
-    message: "Succesfuly in creating new student",
+    message: "Succesfuly in creating new guardian",
     data: oldStudent,
   });
 };
-
+exports.getStudentFullInfo = async (req, res) => {
+  const id = req.params.studentID;
+  const studentPopObj = {
+    path: "guardians",
+    populate: {
+      path: "person",
+      // select: "name",
+    },
+  };
+  const student = await StudentModel.findById(id)
+    .populate({
+      path: "person",
+    })
+    .populate({
+      path: "user",
+    })
+    .populate(studentPopObj);
+  const gradesPopObj = {
+    path: "instructor",
+    populate: {
+      path: "person",
+    },
+  };
+  const grades = await GradeModel.find({
+    student: id,
+  })
+    .populate(gradesPopObj)
+    .populate({
+      path: "schoolData",
+    });
+  const data = {
+    student: student,
+    grades: grades,
+  };
+  return res.status(200).send({
+    message: "Successfully fetched student's full info",
+    data: data,
+  });
+};
 //? BULK FOR SCHOOL DATA
 exports.updateStudentsSchoolData = async (req, res) => {
   const b = req.body;

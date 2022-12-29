@@ -1,4 +1,3 @@
-const { SECRET_KEY } = require("../constants/configs");
 const db = require("../models");
 var bcrypt = require("bcryptjs");
 const UserModel = db.users;
@@ -13,7 +12,6 @@ const SchoolDataModel = db.schoolData;
 const GuardianModel = db.guardians;
 
 const { createStaffs, createStudents } = require("./import.controller");
-const { mongoose } = require("../models");
 
 //TODO: update admin data
 exports.createAdmin = async () => {

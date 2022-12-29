@@ -28,6 +28,7 @@ import PageSubjectGroups from "./SubjectGroups/SubjectGroups";
 import PageSubjectGroupsHome from "./SubjectGroups/SubjectGroupsHome";
 import PageSubjectGroupsForm from "./SubjectGroups/SubjectGroupsForm";
 import PageSubjectGroupsInfo from "./SubjectGroups/SubjectGroupsInfo";
+import PageSubjectGroupNewStudent from "./SubjectGroups/SubjectGroupNewStudent";
 
 import PageSchedules from "./Schedules/Schedules";
 import PageSchedulesHome from "./Schedules/SchedulesHome";
@@ -69,6 +70,10 @@ const Pages = () => {
             <Route path="" element={<PageSubjectGroupsHome />} />
             <Route path="form" element={<PageSubjectGroupsForm />} />
             <Route path="info" element={<PageSubjectGroupsInfo />} />
+            <Route
+              path="info/new-student"
+              element={<PageSubjectGroupNewStudent />}
+            />
           </Route>
           <Route path="schedules" element={<PageSchedules />}>
             <Route path="" element={<PageSchedulesHome />} />

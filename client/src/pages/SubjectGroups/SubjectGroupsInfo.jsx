@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { select } from "../../features/dataSlice";
 import { useNavigate } from "react-router-dom";
 import "./SubjectGroupsInfo.css";
 import { getClassDetails } from "../../api/subjectGroup";
@@ -28,6 +29,16 @@ const SubjectGroupsInfo = () => {
       navigate("/classes");
     }
   };
+
+  const handleNewStudent = async () => {
+    dispatch(
+      select({
+        data: data.selectedData,
+        selectedType: "class-info-new-student",
+      })
+    );
+    navigate("/classes/info/new-student");
+  };
   if (sGroup === null) {
     return (
       <>
@@ -49,25 +60,37 @@ const SubjectGroupsInfo = () => {
           </div>
         </div>
         <div className="class-body">
-          <div className="class-student">
-            <div className="class-student-field">
-              <span>Name of student</span>
-              <h6>Student</h6>
-            </div>
-            <div className="class-student-field">
-              <span>1-A</span>
-              <h6>Year&Section</h6>
-            </div>
-            <div className="class-student-field">
-              <span>50.24</span>
-              <h6>Current Grade</h6>
-            </div>
-            <div className="class-student-functions">
-              <button className="class-function">Grade</button>
-            </div>
-          </div>
+          {sGroup.students.map((student) => {
+            const studentID = student._id;
+            return (
+              <div className="class-student">
+                <div className="class-student-field">
+                  <span>{getFullName(student.person)}</span>
+                  <h6>Student</h6>
+                </div>
+                <div className="class-student-field">
+                  <span>{student.yearLevel + "-" + student.section}</span>
+                  <h6>Year & Section</h6>
+                </div>
+                <div className="class-student-field">
+                  <span>{student.gradeRaw}</span>
+                  <h6>Current Grade</h6>
+                </div>
+                <div className="class-student-functions">
+                  <button className="class-function">Grade</button>
+                </div>
+              </div>
+            );
+          })}
           <div className="class-student-plus">
-            <button>+</button>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                handleNewStudent();
+              }}
+            >
+              +
+            </button>
           </div>
         </div>
       </div>

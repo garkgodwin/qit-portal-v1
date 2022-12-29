@@ -82,6 +82,16 @@ form{
   background-color: transparent;
 }
 
+.input-field-check{
+  flex-direction: row;
+  justify-content: space-between;
+}
+.input-field-check input{
+  height: 24px;
+  width: 24px;
+}
+
+
 .input-field select option span{
   margin: 4px;
 }

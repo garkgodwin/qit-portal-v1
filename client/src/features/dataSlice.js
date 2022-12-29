@@ -76,6 +76,12 @@ export const dataSlice = createSlice({
             return d;
           } else return acc;
         });
+      } else if (t === "subjectGroup") {
+        state.subjectGroups = state.subjectGroups.map((acc) => {
+          if (acc._id === d._id) {
+            return d;
+          } else return acc;
+        });
       }
     },
     append: (state, action) => {

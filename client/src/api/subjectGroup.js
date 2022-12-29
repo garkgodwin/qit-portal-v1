@@ -81,6 +81,86 @@ export const getClassesOfThisSubject = async (code) => {
   return result;
 };
 
+export const getAvailableStudentsToAddForThisClass = async (id) => {
+  const token = localStorage.getItem("token");
+  let result = {
+    status: 0,
+    message: "",
+    data: null,
+  };
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  await api
+    .get(ROOT + `/${id}/available-students`, config)
+    .then((res) => {
+      const resData = res.data;
+      const data = resData.data;
+      const message = resData.message;
+      const status = res.status;
+      result = {
+        ...result,
+        status: status,
+        message: message,
+        data: data,
+      };
+    })
+    .catch((error) => {
+      console.log(error);
+      const { data, status } = error.response;
+      const message = data.message;
+      result = {
+        ...result,
+        status: status,
+        message: message,
+      };
+    });
+  return result;
+};
+
+export const addStudentsToThisSubject = async (id, data) => {
+  const token = localStorage.getItem("token");
+  let result = {
+    status: 0,
+    message: "",
+    data: null,
+  };
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  await api
+    .put(ROOT + `/${id}/new-students`, data, config)
+    .then((res) => {
+      const resData = res.data;
+      const data = resData.data;
+      const message = resData.message;
+      const status = res.status;
+      result = {
+        ...result,
+        status: status,
+        message: message,
+        data: data,
+      };
+    })
+    .catch((error) => {
+      console.log(error);
+      const { data, status } = error.response;
+      const message = data.message;
+      result = {
+        ...result,
+        status: status,
+        message: message,
+      };
+    });
+  return result;
+};
+
 export const removeSubjectGroup = async (subjectGroupID) => {
   const token = localStorage.getItem("token");
   let result = {

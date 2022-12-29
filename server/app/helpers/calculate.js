@@ -1,7 +1,7 @@
 const db = require("../models");
 const { SUBJECTS, GRADING_SYSTEM_PER_SEM } = require("../constants/schoolInfo");
 
-exports.calculateTotalGradesForThisSemAndSY = (grades) => {
+exports.calculateSubjectGradeOfStudent = (grades) => {
   //? get grades per term
   let prelim = [];
   let midterm = [];

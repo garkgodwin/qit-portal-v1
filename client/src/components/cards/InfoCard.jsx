@@ -112,7 +112,7 @@ const InfoCard = ({ data, type }) => {
         data: code,
       })
     );
-    navigate("/subjects/classes");
+    navigate("/classes");
   };
   const handleViewSchedulesOfThisSubject = () => {
     const code = data.code;
@@ -122,7 +122,7 @@ const InfoCard = ({ data, type }) => {
         data: code,
       })
     );
-    navigate("/subjects/classes");
+    navigate("/schedules");
   };
 
   //? CLASSES

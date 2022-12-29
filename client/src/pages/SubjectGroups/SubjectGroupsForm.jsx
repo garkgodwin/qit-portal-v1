@@ -23,10 +23,10 @@ const SubjectGroupsForm = () => {
   const handleCancel = () => {
     navigate("/classes");
   };
+
   const handleSubmit = async () => {
     dispatch(startFormLoading());
     const result = await createNewClass(inputs);
-    console.log(result);
     if (result.status === 200) {
       dispatch(
         append({
@@ -35,12 +35,16 @@ const SubjectGroupsForm = () => {
         })
       );
       navigate("/classes");
+      dispatch(stopFormLoading());
     }
     dispatch(stopFormLoading());
   };
   useEffect(() => {
-    console.log(inputs);
-  }, [inputs]);
+    setInputs({
+      subjectCode: data.subjects[0].code,
+      instructor: data.instructors[0]._id,
+    });
+  }, [data.instructors, data.subjects]);
   return (
     <>
       <Form>

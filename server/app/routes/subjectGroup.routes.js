@@ -5,6 +5,7 @@ let router = require("express").Router();
 module.exports = (app) => {
   // subject groups
   router.post("/", controller.createSubjectGroup);
+  router.get("/:code/classes", controller.getSubjectGroupsOfThisSubject);
 
   app.use("/api/v1/subject-groups", router);
 };

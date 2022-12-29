@@ -57,3 +57,43 @@ exports.createSubjectGroup = async (req, res) => {
     data: subGroup,
   });
 };
+
+exports.getSubjectGroupsOfThisSubject = async (req, res) => {
+  const code = req.params.code;
+  const currentSD = await SchoolDataModel.findOne({
+    current: true,
+    locked: false,
+  });
+  if (!currentSD) {
+    return res.status(404).send({
+      message: "There are no active school data",
+    });
+  }
+
+  const popObj = {
+    path: "instructor",
+    populate: {
+      path: "person",
+      // select: "name",
+    },
+  };
+  const popObj1 = {
+    path: "students",
+    populate: {
+      path: "person",
+    },
+  };
+
+  const classes = await SissModel.find({
+    subjectCode: code,
+    schoolData: currentSD._id,
+  })
+    .populate(popObj)
+    .populate(popObj1)
+    .exec();
+
+  return res.status(200).send({
+    message: "Successfully fetched the classes of this subject",
+    data: classes,
+  });
+};

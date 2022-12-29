@@ -102,6 +102,27 @@ const InfoCard = ({ data, type }) => {
     navigate("/students/info");
   };
 
+  //? SUBJECTS AND SUBJECT GROUPS
+  const handleViewCLassesOfThisSubject = () => {
+    const code = data.code;
+    dispatch(
+      selectData({
+        selectedType: "subject",
+        data: code,
+      })
+    );
+    navigate("/subjects/classes");
+  };
+  const handleViewSchedulesOfThisSubject = () => {
+    const code = data.code;
+    dispatch(
+      selectData({
+        selectedType: "subject",
+        data: code,
+      })
+    );
+    navigate("/subjects/classes");
+  };
   return (
     <div className="InfoCard">
       {type === 1 || type === 2 ? (
@@ -261,8 +282,24 @@ const InfoCard = ({ data, type }) => {
           </div>
           <div className="info-card-bot">
             <InfoCardField text={data.name} title="Subject Name" />
-            <button className="info-card-function">View classes</button>
-            <button className="info-card-function">View schedules</button>
+            <button
+              className="info-card-function"
+              onClick={(e) => {
+                e.preventDefault();
+                handleViewCLassesOfThisSubject();
+              }}
+            >
+              View classes
+            </button>
+            <button
+              className="info-card-function"
+              onClick={(e) => {
+                e.preventDefault();
+                handleViewSchedulesOfThisSubject();
+              }}
+            >
+              View schedules
+            </button>
           </div>
         </>
       ) : type === 5 ? (

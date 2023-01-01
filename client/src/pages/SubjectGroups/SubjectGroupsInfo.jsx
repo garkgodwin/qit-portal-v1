@@ -63,7 +63,7 @@ const SubjectGroupsInfo = () => {
           {sGroup.students.map((student) => {
             const studentID = student._id;
             return (
-              <div className="class-student">
+              <div key={studentID} className="class-student">
                 <div className="class-student-field">
                   <span>{getFullName(student.person)}</span>
                   <h6>Student</h6>

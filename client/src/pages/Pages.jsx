@@ -40,48 +40,144 @@ const Pages = () => {
     <main
       className={"Page" + (auth.loggedInPerson === null ? "" : " page-authed")}
     >
-      {auth.loggedInPerson === null ? (
-        <Routes>
+      <Routes>
+        {auth.loggedInPerson === null ? (
           <Route index path="/login" element={<PageLogin />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      ) : (
-        <Routes>
-          <Route index path="/" element={<PageDashboard />} />
-          <Route path="accounts" element={<PageAccounts />}>
-            <Route path="" element={<PageAccountsHome />} />
-            <Route path="form" element={<PageAccountsForm />} />
-          </Route>
-          <Route path="staffs" element={<PageStaffs />}>
-            <Route path="" element={<PageStaffsHome />} />
-            <Route path="form" element={<PageStaffSForm />} />
-          </Route>
-          <Route path="students" element={<PageStudents />}>
-            <Route path="" element={<PageStudentsHome />} />
-            <Route path="form" element={<PageStudentsForm />} />
-            <Route path="info" element={<PageStudentsInfo />} />
-            <Route path="subjects" element={<PageStudentsSubjects />} />
-          </Route>
-          <Route path="subjects" element={<PageSubjects />}>
-            <Route path="" element={<PageSubjectsHome />} />
-            <Route path="form" element={<PageSubjectsForm />} />
-          </Route>
-          <Route path="classes" element={<PageSubjectGroups />}>
-            <Route path="" element={<PageSubjectGroupsHome />} />
-            <Route path="form" element={<PageSubjectGroupsForm />} />
-            <Route path="info" element={<PageSubjectGroupsInfo />} />
-            <Route
-              path="info/new-student"
-              element={<PageSubjectGroupNewStudent />}
-            />
-          </Route>
-          <Route path="schedules" element={<PageSchedules />}>
-            <Route path="" element={<PageSchedulesHome />} />
-            <Route path="form" element={<PageSchedulesForm />} />
-          </Route>
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      )}
+        ) : auth.loggedInPerson.user.role === 1 ? (
+          <>
+            <Route index path="" element={<PageDashboard />} />
+            <Route path="accounts" element={<PageAccounts />}>
+              <Route path="" element={<PageAccountsHome />} />
+              <Route path="form" element={<PageAccountsForm />} />
+            </Route>
+            <Route path="staffs" element={<PageStaffs />}>
+              <Route path="" element={<PageStaffsHome />} />
+              <Route path="form" element={<PageStaffSForm />} />
+            </Route>
+            <Route path="students" element={<PageStudents />}>
+              <Route path="" element={<PageStudentsHome />} />
+              <Route path="form" element={<PageStudentsForm />} />
+              <Route path="info" element={<PageStudentsInfo />} />
+              <Route path="subjects" element={<PageStudentsSubjects />} />
+            </Route>
+            <Route path="subjects" element={<PageSubjects />}>
+              <Route path="" element={<PageSubjectsHome />} />
+              <Route path="form" element={<PageSubjectsForm />} />
+            </Route>
+            <Route path="classes" element={<PageSubjectGroups />}>
+              <Route path="" element={<PageSubjectGroupsHome />} />
+              <Route path="form" element={<PageSubjectGroupsForm />} />
+              <Route path="info" element={<PageSubjectGroupsInfo />} />
+              <Route
+                path="info/new-student"
+                element={<PageSubjectGroupNewStudent />}
+              />
+            </Route>
+            <Route path="schedules" element={<PageSchedules />}>
+              <Route path="" element={<PageSchedulesHome />} />
+              <Route path="form" element={<PageSchedulesForm />} />
+            </Route>
+          </>
+        ) : auth.loggedInPerson.user.role === 2 ? (
+          <>
+            <Route index path="/" element={<PageDashboard />} />
+            <Route path="students" element={<PageStudents />}>
+              <Route path="" element={<PageStudentsHome />} />
+              <Route path="form" element={<PageStudentsForm />} />
+              <Route path="info" element={<PageStudentsInfo />} />
+              <Route path="subjects" element={<PageStudentsSubjects />} />
+            </Route>
+            <Route path="subjects" element={<PageSubjects />}>
+              <Route path="" element={<PageSubjectsHome />} />
+              <Route path="form" element={<PageSubjectsForm />} />
+            </Route>
+            <Route path="classes" element={<PageSubjectGroups />}>
+              <Route path="" element={<PageSubjectGroupsHome />} />
+              <Route path="form" element={<PageSubjectGroupsForm />} />
+              <Route path="info" element={<PageSubjectGroupsInfo />} />
+              <Route
+                path="info/new-student"
+                element={<PageSubjectGroupNewStudent />}
+              />
+            </Route>
+            <Route path="schedules" element={<PageSchedules />}>
+              <Route path="" element={<PageSchedulesHome />} />
+              <Route path="form" element={<PageSchedulesForm />} />
+            </Route>
+          </>
+        ) : auth.loggedInPerson.user.role === 3 ? (
+          <>
+            <Route index path="/" element={<PageDashboard />} />
+            <Route path="students" element={<PageStudents />}>
+              <Route path="" element={<PageStudentsHome />} />
+              <Route path="form" element={<PageStudentsForm />} />
+              <Route path="info" element={<PageStudentsInfo />} />
+              <Route path="subjects" element={<PageStudentsSubjects />} />
+            </Route>
+            <Route path="subjects" element={<PageSubjects />}>
+              <Route path="" element={<PageSubjectsHome />} />
+              <Route path="form" element={<PageSubjectsForm />} />
+            </Route>
+            <Route path="classes" element={<PageSubjectGroups />}>
+              <Route path="" element={<PageSubjectGroupsHome />} />
+              <Route path="form" element={<PageSubjectGroupsForm />} />
+              <Route path="info" element={<PageSubjectGroupsInfo />} />
+              <Route
+                path="info/new-student"
+                element={<PageSubjectGroupNewStudent />}
+              />
+            </Route>
+            <Route path="schedules" element={<PageSchedules />}>
+              <Route path="" element={<PageSchedulesHome />} />
+              <Route path="form" element={<PageSchedulesForm />} />
+            </Route>
+          </>
+        ) : auth.loggedInPerson.user.role === 4 ? (
+          <>
+            <Route index path="/" element={<PageDashboard />} />
+            <Route path="subjects" element={<PageSubjects />}>
+              <Route path="" element={<PageSubjectsHome />} />
+              <Route path="form" element={<PageSubjectsForm />} />
+            </Route>
+            <Route path="classes" element={<PageSubjectGroups />}>
+              <Route path="" element={<PageSubjectGroupsHome />} />
+              <Route path="form" element={<PageSubjectGroupsForm />} />
+              <Route path="info" element={<PageSubjectGroupsInfo />} />
+              <Route
+                path="info/new-student"
+                element={<PageSubjectGroupNewStudent />}
+              />
+            </Route>
+            <Route path="schedules" element={<PageSchedules />}>
+              <Route path="" element={<PageSchedulesHome />} />
+              <Route path="form" element={<PageSchedulesForm />} />
+            </Route>
+          </>
+        ) : auth.loggedInPerson.user.role === 5 ? (
+          <>
+            <Route index path="/" element={<PageDashboard />} />
+            <Route path="subjects" element={<PageSubjects />}>
+              <Route path="" element={<PageSubjectsHome />} />
+              <Route path="form" element={<PageSubjectsForm />} />
+            </Route>
+            <Route path="classes" element={<PageSubjectGroups />}>
+              <Route path="" element={<PageSubjectGroupsHome />} />
+              <Route path="form" element={<PageSubjectGroupsForm />} />
+              <Route path="info" element={<PageSubjectGroupsInfo />} />
+              <Route
+                path="info/new-student"
+                element={<PageSubjectGroupNewStudent />}
+              />
+            </Route>
+            <Route path="schedules" element={<PageSchedules />}>
+              <Route path="" element={<PageSchedulesHome />} />
+              <Route path="form" element={<PageSchedulesForm />} />
+            </Route>
+          </>
+        ) : null}
+
+        <Route path="*" element={<PageNotFound />} />
+      </Routes>
     </main>
   );
 };
